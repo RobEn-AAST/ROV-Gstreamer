@@ -8,4 +8,5 @@ scripts that utilizes the ***Gstreamer*** API to send and recieve Stream data fr
  - [ ] better optimized pipline for H.264 encoding
  - [ ] run script on Pi startup 
  - [ ] support for multi-broadcasting
- - [ ] exception handling for camera errors
+ - [ ] **exception handling for camera errors**
+    - [ ] tested
