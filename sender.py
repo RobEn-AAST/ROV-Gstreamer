@@ -13,25 +13,38 @@ from gi.repository import Gst, GLib, GObject
 
 Gst.init(sys.argv[1:])
 
-devices = ["video0", "video1", "video2", "video3"]
+devices = {
+    'cam0' : {'dev':'video0', 'port':'5000'},
+    'cam1' : {'dev':'video1', 'port':'5100'},
+    'cam2' : {'dev':'video2', 'port':'5200'},
+    'cam3' : {'dev':'video2', 'port':'5300'}
+}
 
 
 
 ###################### create elemenst ##################
-pipStr = f'v4l2src device="/dev/{devices[0]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port= 5000'
+pipStr0 = f'v4l2src device="/dev/{devices["cam0"]["dev"]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port={devices["cam0"]["port"]}'
+pipStr1 = f'v4l2src device="/dev/{devices["cam1"]["dev"]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port={devices["cam1"]["port"]}'
+pipStr2 = f'v4l2src device="/dev/{devices["cam2"]["dev"]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port={devices["cam2"]["port"]}'
+pipStr2 = f'v4l2src device="/dev/{devices["cam3"]["dev"]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port={devices["cam3"]["port"]}'
+print(pipStr0)
+pipeline0 = Gst.parse_launch(pipStr0)
+pipeline1 = Gst.parse_launch(pipStr1)
+pipeline2 = Gst.parse_launch(pipStr2)
 
-pipeline = Gst.parse_launch(pipStr)
-if not pipeline:
+if not pipeline0 or not pipeline1 or not pipeline2:
     print("pipeline error")
     sys.exit(1)
 
 
-
 ###################### Running piplines ##################
-ret = pipeline.set_state(Gst.State.PLAYING)
-if ret == Gst.StateChangeReturn.FAILURE:
-    print("Unable to set the pipeline to the playing state.")
-    sys.exit(1)
+while True:
+    ret0 = pipeline0.set_state(Gst.State.PLAYING)
+    # ret1 = pipeline1.set_state(Gst.State.PLAYING)
+    # ret2 = pipeline2.set_state(Gst.State.PLAYING)
+    if ret0 == Gst.StateChangeReturn.FAILURE:
+        print("Unable to set the pipeline to the playing state.")
+        sys.exit(1)
 
 
 
