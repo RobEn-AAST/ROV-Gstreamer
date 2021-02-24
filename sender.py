@@ -26,6 +26,12 @@ def resetPipelins(pip0, pip1, pip2, pip3):
     pip2.set_state(Gst.State.NULL)
     pip3.set_state(Gst.State.NULL)
 
+def mainloop():
+    while True:
+        sleep(0.01)
+
+def startPipelines(pip0, pip1, pip2, pip3):
+    pass
 
 ###################### create elemenst ##################
 pipStr0 = f'v4l2src device="/dev/{devices["cam0"]["dev"]}" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=127.0.0.1 port={devices["cam0"]["port"]}'
@@ -74,11 +80,13 @@ while failed < 2:
 
 
 ###################### Main loop ##################
-try:
-    while True:
-        sleep(0.1)
-except KeyboardInterrupt:
-    pass
+while True:
+    try:
+        mainloop()
+    except KeyboardInterrupt:
+        break
+    except Exception:
+        continue;
 
-finally:
-    resetPipelins(pipeline0, pipeline1, pipeline2, pipeline3)
+
+resetPipelins(pipeline0, pipeline1, pipeline2, pipeline3)
