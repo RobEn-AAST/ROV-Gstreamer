@@ -20,12 +20,14 @@ def resetPipelins(pip0, pip1, pip2, pip3):
     pip3.set_state(Gst.State.NULL)
 
 def mainloop():
+    print("- entered main loop...")
     while True:
         sleep(0.01)
 
 def startPipelines(pip0, pip1, pip2, pip3):
     failed = 0
-    while failed < 2:
+    print("- starting pipes...")
+    while failed < 3:
 
         resetPipelins(pip0, pip1, pip2, pip3)
 
@@ -47,7 +49,8 @@ def startPipelines(pip0, pip1, pip2, pip3):
         ret3 = pip3.set_state(Gst.State.PLAYING)
         if ret0 == Gst.StateChangeReturn.FAILURE:
             print("Pipline 3 failed")
-            failed += 1   
+            failed += 1
+        print("\t- trial ended with ", failed, " failed cams.")
 
 ###################### create elemenst ##################
 pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5000'
