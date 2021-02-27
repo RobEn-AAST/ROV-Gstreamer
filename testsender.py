@@ -20,41 +20,52 @@ def resetPipelins(pip0, pip1, pip2, pip3):
     pip3.set_state(Gst.State.NULL)
 
 def mainloop():
-    print("- entered main loop...")
+    print("\n- entered main loop...")
     while True:
         sleep(0.01)
+
+def checkStates():
+    pass
 
 def startPipelines(pip0, pip1, pip2, pip3):
     failed = 0
     first_run = True
     print("- starting pipes...")
-    while failed > 2 or first_run:
+
+    while failed > 3 or first_run:
+
+        if not first_run:
+            sleep(1)
 
         first_run = False
+        failed = 0
 
         resetPipelins(pip0, pip1, pip2, pip3)
 
+        _, pip0State, _ = pip1.get_state(timeout=10*Gst.SECOND)
+
         ret0 = pip0.set_state(Gst.State.PLAYING)
         if ret0 == Gst.StateChangeReturn.FAILURE:
-            print("Pipline 0 failed")
+            print("- Pipline 0 failed")
             failed += 1
 
         ret1 = pip1.set_state(Gst.State.PLAYING)
-        if ret0 == Gst.StateChangeReturn.FAILURE:
-            print("Pipline 1 failed")
+        if ret1 == Gst.StateChangeReturn.FAILURE:
+            print("- Pipline 1 failed")
             failed += 1
 
         ret2 = pip2.set_state(Gst.State.PLAYING)
-        if ret0 == Gst.StateChangeReturn.FAILURE:
-            print("Pipline 2 failed")
+        if ret2 == Gst.StateChangeReturn.FAILURE:
+            print("- Pipline 2 failed")
             failed += 1
 
         ret3 = pip3.set_state(Gst.State.PLAYING)
-        if ret0 == Gst.StateChangeReturn.FAILURE:
-            print("Pipline 3 failed")
+        if ret3 == Gst.StateChangeReturn.FAILURE:
+            print("- Pipline 3 failed")
             failed += 1
 
-        print("\t- trial ended with ", failed, " failed cams.")
+        print("- trial ended with ", failed, " failed cams.")
+
 
 ###################### create elemenst ##################
 pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5000'
@@ -83,5 +94,5 @@ while True:
         startPipelines(pipeline0, pipeline1, pipeline2, pipeline3)
         continue;
 
-
+print("\nterminating")
 resetPipelins(pipeline0, pipeline1, pipeline2, pipeline3)
