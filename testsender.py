@@ -26,9 +26,12 @@ def mainloop():
 
 def startPipelines(pip0, pip1, pip2, pip3):
     failed = 0
+    first_run = True
     print("- starting pipes...")
-    while failed < 3:
+    while failed > 2 or first_run:
 
+        first_run = False
+        
         resetPipelins(pip0, pip1, pip2, pip3)
 
         ret0 = pip0.set_state(Gst.State.PLAYING)
