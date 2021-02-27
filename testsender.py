@@ -31,7 +31,7 @@ def startPipelines(pip0, pip1, pip2, pip3):
     while failed > 2 or first_run:
 
         first_run = False
-        
+
         resetPipelins(pip0, pip1, pip2, pip3)
 
         ret0 = pip0.set_state(Gst.State.PLAYING)
@@ -53,6 +53,7 @@ def startPipelines(pip0, pip1, pip2, pip3):
         if ret0 == Gst.StateChangeReturn.FAILURE:
             print("Pipline 3 failed")
             failed += 1
+
         print("\t- trial ended with ", failed, " failed cams.")
 
 ###################### create elemenst ##################

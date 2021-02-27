@@ -81,4 +81,5 @@ while True:
         continue;
 
 
+print("- Terminating")
 resetPipelins(pipeline0, pipeline1, pipeline2, pipeline3)
