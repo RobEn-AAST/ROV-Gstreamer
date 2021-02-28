@@ -19,63 +19,54 @@ def resetPipelins(pipelines):
         pipelines[i].set_state(Gst.State.NULL)
 
 
-def checkStates(pipelines):
-    _, pip0State, _ = pipelines[0].get_state(timeout=10*Gst.SECOND)
-
-def mainloop(pipelines):
-    while True:
-        sleep(0.01)
-        checkStates(pipelines)
-
 def startPipelines(pipelines):
     failed = 0
     first_run = True
+    runningPipes = []
 
-    while failed > 2 or first_run:
+    while failed > 4 or first_run:
         failed = 0
 
         if not first_run:
+            resetPipelins(pipelines)
             sleep(1)
 
+        for i, pipeline in enumerate(pipelines):
+            stateReturn = pipeline.set_state(Gst.State.PLAYING)
+            if stateReturn == Gst.StateChangeReturn.FAILURE:
+                print(f"- Pipline {i} failed")
+                failed += 1
+            elif stateReturn == Gst.StateChangeReturn.ASYNC:
+                print(f"- Pipline {i} succeeded")
+                runningPipes.append(pipeline)
 
-        resetPipelins(pipelines)
-
-
-        ret0 = pipelines[0].set_state(Gst.State.PLAYING)
-        if ret0 == Gst.StateChangeReturn.FAILURE:
-            print("- Pipline 0 failed")
-            failed += 1
-
-        ret1 = pipelines[1].set_state(Gst.State.PLAYING)
-        if ret1 == Gst.StateChangeReturn.FAILURE:
-            print("- Pipline 1 failed")
-            failed += 1
-
-        ret2 = pipelines[2].set_state(Gst.State.PLAYING)
-        if ret2 == Gst.StateChangeReturn.FAILURE:
-            print("- Pipline 2 failed")
-            failed += 1
-
-        ret3 = pipelines[3].set_state(Gst.State.PLAYING)
-        if ret3 == Gst.StateChangeReturn.FAILURE:
-            print("- Pipline 3 failed")
-            failed += 1
-
-        ret4 = pipelines[4].set_state(Gst.State.PLAYING)
-        if ret4 == Gst.StateChangeReturn.FAILURE:
-            print("- Pipline 4 failed")
-            failed += 1
 
         print("- trial ended with ", failed, " failed cams.")
 
         first_run = False
 
+    return runningPipes
+
+def checkStates(pipelines):
+    for pipeline in pipelines:
+        _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
+        if state != Gst.State.PLAYING:
+            startPipelines([pipeline])
+            print("Pipline stopped !!!!!!1")
+            break
+
+def mainloop(pipelines):
+    while True:
+        sleep(5)
+        checkStates(pipelines)
+
+
 ###################### create elemenst ##################
-pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5000'
-pipStr1 = 'v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5100'
-pipStr2 = 'v4l2src device="/dev/video2" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5200'
-pipStr3 = 'v4l2src device="/dev/video3" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5300'
-pipStr4 = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5400'
+pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5000'
+pipStr1 = 'v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5100'
+pipStr2 = 'v4l2src device="/dev/video2" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5200'
+pipStr3 = 'v4l2src device="/dev/video3" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5300'
+pipStr4 = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5400'
 
 
 pipelines = [
@@ -87,18 +78,15 @@ pipelines = [
 ]
 
 ###################### Running piplines ##################
-startPipelines(pipelines)
+runningPipes = startPipelines(pipelines)
 
 
 ###################### Main loop ##################
 while True:
     try:
-        mainloop(pipelines)
+        mainloop(runningPipes)
     except KeyboardInterrupt:
         break
-    except Exception:
-        startPipelines(pipelines)
-        continue;
 
 
 print("\n- Terminating")
