@@ -30,7 +30,8 @@ def startPipelines(pipelines):
     failed = 0
     first_run = True
 
-    while failed > 2 or first_run:
+    while failed > 3 or first_run:
+        failed = 0
 
         if not first_run:
             sleep(1)
@@ -76,7 +77,6 @@ def startPipelines(pipelines):
 
         print("- trial ended with ", failed, " failed cams.")
 
-        failed = 0
         first_run = False
 
 ###################### create elemenst ##################
