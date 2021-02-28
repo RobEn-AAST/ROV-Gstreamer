@@ -41,25 +41,25 @@ def startPipelines(pipelines):
                 runningPipes.append(pipeline)
 
 
-        print("- trial ended with ", failed, " failed cams.")
+        print("- trial ended with " + str(failed) + " failed cams.")
 
         first_run = False
 
     return runningPipes
 
-def pipesAreRunning(pipelines, runningPipes):
+def pipesAreRunning(runningPipes):
     for pipeline in runningPipes:
         _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
         if state != Gst.State.PLAYING:
-            startPipelines(pipelines)
-            print("Pipline stopped !!!!!!1")
-            break
+            print("- Pipline stopped ")
+            return False
+    return True
 
 def mainloop(pipelines):
     runningPips = startPipelines(pipelines)
     while True:
         sleep(3)
-        if not pipesAreRunning(pipelines, runningPips):
+        if not pipesAreRunning(runningPips):
             runningPips = startPipelines()
 
 
