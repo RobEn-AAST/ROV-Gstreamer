@@ -47,18 +47,18 @@ def startPipelines(pipelines):
 
     return runningPipes
 
-def checkStates(pipelines):
-    for pipeline in pipelines:
+def checkStates(pipelines, runningPipes):
+    for pipeline in runningPipes:
         _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
         if state != Gst.State.PLAYING:
-            startPipelines([pipeline])
+            startPipelines(pipelines)
             print("Pipline stopped !!!!!!1")
             break
 
-def mainloop(pipelines):
+def mainloop(pipelines, runningPips):
     while True:
-        sleep(5)
-        checkStates(pipelines)
+        sleep(3)
+        checkStates(pipelines, runningPips)
 
 
 ###################### create elemenst ##################
@@ -84,7 +84,7 @@ runningPipes = startPipelines(pipelines)
 ###################### Main loop ##################
 while True:
     try:
-        mainloop(runningPipes)
+        mainloop(pipelines, runningPipes)
     except KeyboardInterrupt:
         break
 
