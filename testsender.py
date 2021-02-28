@@ -33,7 +33,7 @@ def startPipelines(pipelines):
     failed = 0
     first_run = True
 
-    while failed > 1 or first_run:
+    while failed > 2 or first_run:
 
         if not first_run:
             sleep(1)
@@ -43,21 +43,29 @@ def startPipelines(pipelines):
 
 
         ret0 = pipelines[0].set_state(Gst.State.PLAYING)
+        _, pipState, _ = pipelines[0].get_state(timeout=10*Gst.SECOND)
+        print("- Pipe 0 state : ", pipState)
         if ret0 == Gst.StateChangeReturn.FAILURE:
             print("- Pipline 0 failed")
             failed += 1
 
         ret1 = pipelines[1].set_state(Gst.State.PLAYING)
+        _, pipState, _ = pipelines[1].get_state(timeout=10*Gst.SECOND)
+        print("- Pipe 1 state : ", pipState)
         if ret1 == Gst.StateChangeReturn.FAILURE:
             print("- Pipline 1 failed")
             failed += 1
 
         ret2 = pipelines[2].set_state(Gst.State.PLAYING)
+        _, pipState, _ = pipelines[2].get_state(timeout=10*Gst.SECOND)
+        print("- Pipe 2 state : ", pipState)
         if ret2 == Gst.StateChangeReturn.FAILURE:
             print("- Pipline 2 failed")
             failed += 1
 
         ret3 = pipelines[3].set_state(Gst.State.PLAYING)
+        _, pipState, _ = pipelines[3].get_state(timeout=10*Gst.SECOND)
+        print("- Pipe 3 state : ", pipState)
         if ret3 == Gst.StateChangeReturn.FAILURE:
             print("- Pipline 3 failed")
             failed += 1
