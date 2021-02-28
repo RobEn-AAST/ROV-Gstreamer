@@ -34,10 +34,10 @@ def startPipelines(pipelines):
         for i, pipeline in enumerate(pipelines):
             stateReturn = pipeline.set_state(Gst.State.PLAYING)
             if stateReturn == Gst.StateChangeReturn.FAILURE:
-                print(f"- Pipline {i} failed")
+                print("- Pipline {} failed".format(i))
                 failed += 1
             elif stateReturn == Gst.StateChangeReturn.ASYNC:
-                print(f"- Pipline {i} succeeded")
+                print("- Pipline {} succeeded".format(i))
                 runningPipes.append(pipeline)
 
 
