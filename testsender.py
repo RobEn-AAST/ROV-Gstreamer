@@ -60,7 +60,7 @@ def mainloop(pipelines):
     while True:
         sleep(3)
         if not pipesAreRunning(runningPips):
-            runningPips = startPipelines()
+            runningPips = startPipelines(pipelines)
 
 
 ###################### create elemenst ##################
