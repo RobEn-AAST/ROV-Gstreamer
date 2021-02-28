@@ -15,10 +15,8 @@ Gst.init(sys.argv[1:])
 
 ###################### FX ##################
 def resetPipelins(pipelines):
-    pipelines[0].set_state(Gst.State.NULL)
-    pipelines[1].set_state(Gst.State.NULL)
-    pipelines[2].set_state(Gst.State.NULL)
-    pipelines[3].set_state(Gst.State.NULL)
+    for i in range(5):
+        pipelines[i].set_state(Gst.State.NULL)
 
 
 def checkStates(pipelines):
@@ -62,6 +60,11 @@ def startPipelines(pipelines):
             print("- Pipline 3 failed")
             failed += 1
 
+        ret4 = pipelines[4].set_state(Gst.State.PLAYING)
+        if ret4 == Gst.StateChangeReturn.FAILURE:
+            print("- Pipline 4 failed")
+            failed += 1
+
         print("- trial ended with ", failed, " failed cams.")
 
         failed = 0
@@ -72,8 +75,16 @@ pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 !  t
 pipStr1 = 'v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5100'
 pipStr2 = 'v4l2src device="/dev/video2" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5200'
 pipStr3 = 'v4l2src device="/dev/video3" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5300'
+pipStr4 = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 !  timeoverlay ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5400'
 
-pipelines = [Gst.parse_launch(pipStr0), Gst.parse_launch(pipStr1), Gst.parse_launch(pipStr2), Gst.parse_launch(pipStr3)]
+
+pipelines = [
+    Gst.parse_launch(pipStr0),
+    Gst.parse_launch(pipStr1),
+    Gst.parse_launch(pipStr2),
+    Gst.parse_launch(pipStr3),
+    Gst.parse_launch(pipStr4)
+]
 
 ###################### Running piplines ##################
 startPipelines(pipelines)
