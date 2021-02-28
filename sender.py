@@ -41,7 +41,7 @@ def startPipelines(pipelines):
                 runningPipes.append(pipeline)
 
 
-        print("- trial ended with ", failed, " failed cams.")
+        print("- trial ended with " + str(failed) + " failed cams.")
 
         first_run = False
 
