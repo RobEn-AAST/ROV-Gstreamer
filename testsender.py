@@ -36,7 +36,7 @@ def startPipelines(pipelines):
             if stateReturn == Gst.StateChangeReturn.FAILURE:
                 print("- Pipline {} failed".format(i))
                 failed += 1
-            elif stateReturn == Gst.StateChangeReturn.ASYNC:
+            elif stateReturn == Gst.StateChangeReturn.ASYNC or Gst.StateChangeReturn.SUCCESS:
                 print("- Pipline {} succeeded".format(i))
                 runningPipes.append(pipeline)
 
@@ -47,7 +47,7 @@ def startPipelines(pipelines):
 
     return runningPipes
 
-def checkStates(pipelines, runningPipes):
+def pipesAreRunning(pipelines, runningPipes):
     for pipeline in runningPipes:
         _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
         if state != Gst.State.PLAYING:
@@ -55,10 +55,12 @@ def checkStates(pipelines, runningPipes):
             print("Pipline stopped !!!!!!1")
             break
 
-def mainloop(pipelines, runningPips):
+def mainloop(pipelines):
+    runningPips = startPipelines(pipelines)
     while True:
         sleep(3)
-        checkStates(pipelines, runningPips)
+        if not pipesAreRunning(pipelines, runningPips):
+            runningPips = startPipelines()
 
 
 ###################### create elemenst ##################
@@ -78,13 +80,13 @@ pipelines = [
 ]
 
 ###################### Running piplines ##################
-runningPipes = startPipelines(pipelines)
+# runningPipes = startPipelines(pipelines)
 
 
 ###################### Main loop ##################
 while True:
     try:
-        mainloop(pipelines, runningPipes)
+        mainloop(pipelines)
     except KeyboardInterrupt:
         break
 
