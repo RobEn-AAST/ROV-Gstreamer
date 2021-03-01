@@ -23,15 +23,15 @@ def resetPipelins(pipelines):
 def startPipelines(pipelines):
     failed = 0
     global first_run
-    first_run = True
     runningPipes = []
 
-    while failed > 4 or first_run:
+    while failed > 3 or first_run:
         failed = 0
 
         if not first_run:
             resetPipelins(pipelines)
             sleep(1)
+            print("- reseting pipelines...")
 
         for i, pipeline in enumerate(pipelines):
             stateReturn = pipeline.set_state(Gst.State.PLAYING)
