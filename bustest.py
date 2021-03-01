@@ -21,9 +21,12 @@ def isVideo(element):
 def startPipes():
     cams = filter(isVideo, os.listdir("/dev/"))
     pipelines = []
+    print(cams)
 
     for i, cam in enumerate(cams):
-        pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5{}00'.format(cam, i)
+        pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5{}00'.format(cam, i)
+        print(pipStr)
+
         pipeline = Gst.parse_launch(pipStr)
         pipelines.append(pipeline)
 
@@ -45,7 +48,7 @@ def startPipes():
 
     
 pipelines = startPipes()
-bus = pipelines[0].get_bus()
+bus = pipelines[1].get_bus()
 print("bus running")
 
 msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
