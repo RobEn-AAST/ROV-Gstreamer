@@ -14,7 +14,7 @@ Gst.init(sys.argv[1:])
 ###################### /inits ################## 
 
 ###################### create elemenst ##################
-pipStr = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5000'
+pipStr = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5000'
 pipeline = Gst.parse_launch(pipStr)
 if not pipeline:
     print("pipeline error")
