@@ -24,7 +24,7 @@ pipelines = []
 for i, cam in enumerate(cams):
     pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5{}00'.format(cam, i)
     pipeline = Gst.parse_launch(pipStr)
-    pipeline.append(pipeline)
+    pipelines.append(pipeline)
 
 for pipeline in pipelines:
     if not pipeline:
