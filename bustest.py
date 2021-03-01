@@ -26,8 +26,11 @@ ret = pipeline.set_state(Gst.State.PLAYING)
 if ret == Gst.StateChangeReturn.FAILURE:
     print("Unable to set the pipeline to the playing state.")
     sys.exit(1)
+else:
+    print("pipeline started.")
 
 bus = pipeline.get_bus()
+print("bus running")
 msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
 
 # Parse message
