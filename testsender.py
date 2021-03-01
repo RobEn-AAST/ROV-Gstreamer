@@ -18,6 +18,7 @@ first_run = True
 def resetPipelins(pipelines):
     for i in range(5):
         pipelines[i].set_state(Gst.State.NULL)
+        print("- pipeline " + str(i) + " resetting to null")
 
 
 def startPipelines(pipelines):
