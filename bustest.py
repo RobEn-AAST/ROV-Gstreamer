@@ -34,8 +34,8 @@ msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.Me
 if msg:
     if msg.type == Gst.MessageType.ERROR:
         err, debug_info = msg.parse_error()
-        print(f"Error received from element {msg.src.get_name()}: {err.message}")
-        print(f"Debugging information: {debug_info if debug_info else 'none'}")
+        print("Error received from element" +  str(msg.src.get_name()) + " : " +  str(err.message))
+        print("Debugging information: " + str(debug_info if debug_info else 'none'))
     elif msg.type == Gst.MessageType.EOS:
         print("End-Of-Stream reached.")
     else:
