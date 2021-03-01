@@ -23,6 +23,7 @@ def resetPipelins(pipelines):
 def startPipelines(pipelines):
     failed = 0
     global first_run
+    first_run = True
     runningPipes = []
 
     while failed > 4 or first_run:
@@ -65,11 +66,11 @@ def mainloop(pipelines):
 
 
 ###################### create elemenst ##################
-pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5000'
-pipStr1 = 'v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5100'
-pipStr2 = 'v4l2src device="/dev/video2" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5200'
-pipStr3 = 'v4l2src device="/dev/video3" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5300'
-pipStr4 = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.1 port=5400'
+pipStr0 = 'v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5000'
+pipStr1 = 'v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5100'
+pipStr2 = 'v4l2src device="/dev/video2" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5200'
+pipStr3 = 'v4l2src device="/dev/video3" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5300'
+pipStr4 = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.1 port=5400'
 
 
 pipelines = [
