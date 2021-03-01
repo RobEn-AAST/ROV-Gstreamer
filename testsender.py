@@ -24,6 +24,7 @@ def startPipelines(pipelines):
     failed = 0
     global first_run
     runningPipes = []
+    print("starting Pipelines, fisrt try = " + str(first_run))
 
     while failed > 3 or first_run:
         failed = 0
