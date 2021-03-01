@@ -3,6 +3,7 @@
 ###################### inits ##################
 import gi
 import sys
+import os
 
 gi.require_version("GLib", "2.0")
 gi.require_version("GObject", "2.0")
@@ -14,22 +15,33 @@ Gst.init(sys.argv[1:])
 ###################### /inits ################## 
 
 ###################### create elemenst ##################
-pipStr = 'v4l2src device="/dev/video4" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5000'
-pipeline = Gst.parse_launch(pipStr)
-if not pipeline:
-    print("pipeline error")
-    sys.exit(1)
+def isVideo(element):
+    return True if element.startswith("video") else False 
+
+cams = filter(isVideo, os.listdir("/dev/"))
+pipelines = []
+
+for i, cam in enumerate(cams):
+    pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5{}00'.format(cam, i)
+    pipeline = Gst.parse_launch(pipStr)
+    pipeline.append(pipeline)
+
+for pipeline in pipelines:
+    if not pipeline:
+        print("pipeline error")
+        sys.exit(1)
 ###################### /create elemenst ##################
 
 ###################### Running pipline ##################
-ret = pipeline.set_state(Gst.State.PLAYING)
-if ret == Gst.StateChangeReturn.FAILURE:
-    print("Unable to set the pipeline to the playing state.")
-    sys.exit(1)
-else:
-    print("pipeline started.")
+for pipeline in pipelines:
+    ret = pipeline.set_state(Gst.State.PLAYING)
+    if ret == Gst.StateChangeReturn.FAILURE:
+        print("Unable to set the pipeline to the playing state.")
+        sys.exit(1)
+    else:
+        print("pipeline started.")
 
-bus = pipeline.get_bus()
+bus = pipeline[0].get_bus()
 print("bus running")
 msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
 
