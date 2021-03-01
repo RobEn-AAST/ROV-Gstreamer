@@ -12,6 +12,7 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib, GObject
 
 Gst.init(sys.argv[1:])
+first_run = True
 
 ###################### FX ##################
 def resetPipelins(pipelines):
@@ -21,7 +22,7 @@ def resetPipelins(pipelines):
 
 def startPipelines(pipelines):
     failed = 0
-    first_run = True
+    global first_run
     runningPipes = []
 
     while failed > 4 or first_run:
