@@ -18,32 +18,37 @@ Gst.init(sys.argv[1:])
 def isVideo(element):
     return True if element.startswith("video") else False 
 
-cams = filter(isVideo, os.listdir("/dev/"))
-pipelines = []
+def startPipes():
+    cams = filter(isVideo, os.listdir("/dev/"))
+    pipelines = []
 
-for i, cam in enumerate(cams):
-    pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5{}00'.format(cam, i)
-    pipeline = Gst.parse_launch(pipStr)
-    pipelines.append(pipeline)
+    for i, cam in enumerate(cams):
+        pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink buffer-size=50000000 host=192.168.2.255 port=5{}00'.format(cam, i)
+        pipeline = Gst.parse_launch(pipStr)
+        pipelines.append(pipeline)
 
-for pipeline in pipelines:
-    if not pipeline:
-        print("pipeline error")
-        sys.exit(1)
-###################### /create elemenst ##################
+    for pipeline in pipelines:
+        if not pipeline:
+            print("pipeline error")
+            sys.exit(1)
+    ###################### /create elemenst ##################
 
-###################### Running pipline ##################
-for pipeline in pipelines:
-    ret = pipeline.set_state(Gst.State.PLAYING)
-    if ret == Gst.StateChangeReturn.FAILURE:
-        print("Unable to set the pipeline to the playing state.")
-    else:
-        print("pipeline started.")
+    ###################### Running pipline ##################
+    for pipeline in pipelines:
+        ret = pipeline.set_state(Gst.State.PLAYING)
+        if ret == Gst.StateChangeReturn.FAILURE:
+            print("Unable to set the pipeline to the playing state.")
+        else:
+            print("pipeline started.")
 
+    return pipelines
+
+    
+pipelines = startPipes()
 bus = pipelines[0].get_bus()
 print("bus running")
-msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
 
+msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
 # Parse message
 if msg:
     if msg.type == Gst.MessageType.ERROR:
@@ -56,5 +61,6 @@ if msg:
         # This should not happen as we only asked for ERRORs and EOS
         print("Unexpected message received.")
 
-pipeline.set_state(Gst.State.NULL)
+
+pipelines[0].set_state(Gst.State.NULL)
 ###################### Running pipline ##################
