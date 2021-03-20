@@ -8,7 +8,7 @@ scripts that utilizes the ***Gstreamer*** API to send and recieve Stream data fr
  - [ ] write a reciever script using opencv not gstreamer
  - [ ] better optimized pipline for H.264 encoding
  - [ ] run script on Pi startup 
- - [ ] support for multi-broadcasting
+ - [X] support for multi-broadcasting
  - [ ] **exception handling for camera errors**
     - [X] write the damned thing
     - [ ] test it

@@ -15,14 +15,16 @@ def mainloop():
 
 Gst.init(sys.argv[1:])
 
-# main_loop = GLib.MainLoop()
-# thread = Thread(target=main_loop.run)
-# thread.start()
+main_loop = GLib.MainLoop()
+thread = Thread(target=main_loop.run)
+thread.start()
 
-pipeline = Gst.parse_launch('v4l2src device="/dev/video0" ! decodebin ! videoconvert ! autovideosink')
+pip0 = Gst.parse_launch('v4l2src device="/dev/video0" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5000')
+pip1 = Gst.parse_launch('v4l2src device="/dev/video1" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5100')
 
 
-pipeline.set_state(Gst.State.PLAYING)
+pip0.set_state(Gst.State.PLAYING)
+pip1.set_state(Gst.State.PLAYING)
 
 try:
     mainloop()
@@ -30,5 +32,7 @@ except KeyboardInterrupt:
     print("exiting")
     pass
 
-pipeline.set_state(Gst.State.NULL)
-# main_loop.quit()
+pip0.set_state(Gst.State.NULL)
+pip1.set_state(Gst.State.NULL)
+
+main_loop.quit()
