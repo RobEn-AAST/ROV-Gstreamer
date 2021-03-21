@@ -34,9 +34,7 @@ def startPipes():
         if not pipeline:
             print("pipeline error")
             sys.exit(1)
-    ###################### /create elemenst ##################
 
-    ###################### Running pipline ##################
     for pipeline in pipelines:
         ret = pipeline.set_state(Gst.State.PLAYING)
         if ret == Gst.StateChangeReturn.FAILURE:
