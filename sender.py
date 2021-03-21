@@ -69,7 +69,7 @@ pipes = startPipes()
 try:
     mainloop(pipes)
 except KeyboardInterrupt:
-    print("exiting...\n")
+    print("\nexiting...")
     pass
 
 
