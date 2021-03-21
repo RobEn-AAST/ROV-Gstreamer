@@ -10,20 +10,21 @@ On the other end we have laptops setup with a reciever script that recieves stre
 ### Usage
 To use the sender script make sure you installed python3 and gstreamer for your linux system and that's as far as setting your environment goes.
 
- - make sure your cameras are connected to the 
+ - make sure your cameras are connected to the PI
+ - make sure you are runnning the appropriate reciever script on the recieving devices
 
 ### TODO:
 
  - [X] write the damned thing
  - [X] test it
- - [ ] **exception handling for camera errors**
+ - [X] exception handling for camera errors
  - [ ] run script on Pi startup 
  - [X] support for multi-device broadcasting
  - [ ] better optimized pipline for H.264 encoding
  - [ ] write a reciever script using opencv not gstreamer
- - [ ] remove all print statements and debug info
+ - [ ] remove uneeded print statements and debug info
 
 
- ### Nots:
+ ### Notes:
 
  note to self : if we use a half decent router as the switch for this home network it probably won't work as the switch will instantly block the streams coming in from the broadcast IP
