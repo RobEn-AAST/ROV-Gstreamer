@@ -59,7 +59,7 @@ def checkStates(pipelines):
 
 
 main_loop = GLib.MainLoop()
-thread = Thread(target=main_loop.run)
+thread = Thread(target=main_loop.run, daemon=True)
 thread.start()
 
 
