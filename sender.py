@@ -34,11 +34,17 @@ def getCamsAndPipes():
 
     return pipelines
 
+def cleanPipelins(pipelines):
+    for i, pipe in enumerate(pipelines):
+        pipe.set_state(Gst.State.NULL)
+        print("- pipeline " + str(i) + " resetting to null")
+
 def startPipes(pipelines = getCamsAndPipes()):
 
     global failCount
 
     if failCount > 3: # max attempts to allow before searching the file system for cams again
+        cleanPipelins(pipelines)
         pipelines = getCamsAndPipes()
         print("Searching for cams again")
 
@@ -73,10 +79,7 @@ def mainloop(pipes):
         sleep(3)
         checkStates(pipes)
 
-def cleanPipelins(pipelines):
-    for i, pipe in enumerate(pipelines):
-        pipe.set_state(Gst.State.NULL)
-        print("- pipeline " + str(i) + " resetting to null")
+
 
 
 main_loop = GLib.MainLoop()
@@ -94,4 +97,5 @@ except KeyboardInterrupt:
 finally:
     cleanPipelins(pipes)
     main_loop.quit()
+    exit(0)
 
