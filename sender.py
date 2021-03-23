@@ -81,16 +81,17 @@ def cleanPipelins(pipelines):
 
 main_loop = GLib.MainLoop()
 thread = Thread(target=main_loop.run, daemon=True)
-thread.start()
 
-pipes = startPipes()
 
 try:
+    thread.start()
+    pipes = startPipes()
     mainloop(pipes)
+    
 except KeyboardInterrupt:
     print("\nexiting...")
-    pass
 
+finally:
+    cleanPipelins(pipes)
+    main_loop.quit()
 
-cleanPipelins(pipes)
-main_loop.quit()
