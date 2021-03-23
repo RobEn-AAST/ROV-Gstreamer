@@ -62,6 +62,8 @@ def checkStates(pipelines):
             print("Pipline stopped. Restarting...")
             failedPipes.append(pipeline)
             failCount += 1
+        else:
+            print("pipelines working fine")
 
     if len(failedPipes) > 0:
         startPipes(failedPipes)
