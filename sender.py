@@ -77,8 +77,6 @@ def cleanPipelins(pipelines):
         print("- pipeline " + str(i) + " resetting to null")
 
 
-
-
 main_loop = GLib.MainLoop()
 thread = Thread(target=main_loop.run, daemon=True)
 thread.start()
