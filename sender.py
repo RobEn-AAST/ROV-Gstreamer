@@ -10,18 +10,10 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib
 Gst.init(sys.argv[1:])
 
-def mainloop(pipes):
-    while True:
-        sleep(3)
-        checkStates(pipes)
+failCount = 0
 
 def isVideo(element):
     return True if element.startswith("video") else False
-
-def cleanPipelins(pipelines):
-    for i, pipe in enumerate(pipelines):
-        pipe.set_state(Gst.State.NULL)
-        print("- pipeline " + str(i) + " resetting to null")
 
 def getCamsAndPipes():
     cams = filter(isVideo, os.listdir("/dev/")) # gets list of video devices if isVideo finds them in os list
@@ -30,7 +22,7 @@ def getCamsAndPipes():
     for i, cam in enumerate(cams):
         pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5{}00'.format(cam, i)
 
-        print(pipStr)
+        # print(pipStr)
 
         pipeline = Gst.parse_launch(pipStr)
         pipelines.append(pipeline)
@@ -44,6 +36,12 @@ def getCamsAndPipes():
 
 def startPipes(pipelines = getCamsAndPipes()):
 
+    global failCount
+
+    if failCount > 3: # max attempts to allow before searching the file system for cams again
+        pipelines = getCamsAndPipes()
+        print("Searching for cams again")
+
     for i, pipeline in enumerate(pipelines):
         ret = pipeline.set_state(Gst.State.PLAYING)
         if ret == Gst.StateChangeReturn.FAILURE:
@@ -54,12 +52,31 @@ def startPipes(pipelines = getCamsAndPipes()):
     return pipelines
 
 def checkStates(pipelines):
+
+    global failCount
+    failedPipes = []
+
     for pipeline in pipelines:
         _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
         if state != Gst.State.PLAYING:
             print("Pipline stopped. Restarting...")
-            startPipes([pipeline])
-            break
+            failedPipes.append(pipeline)
+            failCount += 1
+
+    if len(failedPipes) > 0:
+        startPipes(failedPipes)
+            
+def mainloop(pipes):
+    while True:
+        sleep(3)
+        checkStates(pipes)
+
+def cleanPipelins(pipelines):
+    for i, pipe in enumerate(pipelines):
+        pipe.set_state(Gst.State.NULL)
+        print("- pipeline " + str(i) + " resetting to null")
+
+
 
 
 main_loop = GLib.MainLoop()
