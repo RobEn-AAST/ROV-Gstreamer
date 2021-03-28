@@ -10,7 +10,7 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib
 Gst.init(sys.argv[1:])
 
-failCount = 0
+# failCount = 0
 
 def isVideo(element):
     return True if element.startswith("video") else False
@@ -41,12 +41,12 @@ def cleanPipelins(pipelines):
 
 def startPipes(pipelines = getCamsAndPipes()):
 
-    global failCount
+    # global failCount
 
-    if failCount > 3: # max attempts to allow before searching the file system for cams again
-        cleanPipelins(pipelines)
-        pipelines = getCamsAndPipes()
-        print("Searching for cams again")
+    # if failCount > 3: # max attempts to allow before searching the file system for cams again
+    #     cleanPipelins(pipelines)
+    #     pipelines = getCamsAndPipes()
+    #     print("Searching for cams again")
 
     for i, pipeline in enumerate(pipelines):
         ret = pipeline.set_state(Gst.State.PLAYING)
@@ -57,27 +57,27 @@ def startPipes(pipelines = getCamsAndPipes()):
 
     return pipelines
 
-def checkStates(pipelines):
+# def checkStates(pipelines):
 
-    global failCount
-    failedPipes = []
+#     global failCount
+#     failedPipes = []
 
-    for pipeline in pipelines:
-        _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
-        if state != Gst.State.PLAYING:
-            print("Pipline stopped. Restarting...")
-            failedPipes.append(pipeline)
-            failCount += 1
-        else:
-            print("pipelines working fine")
+#     for pipeline in pipelines:
+#         _, state, _ = pipeline.get_state(timeout=10*Gst.SECOND)
+#         if state != Gst.State.PLAYING:
+#             print("Pipline stopped. Restarting...")
+#             failedPipes.append(pipeline)
+#             failCount += 1
+#         else:
+#             print("pipelines working fine")
 
-    if len(failedPipes) > 0:
-        startPipes(failedPipes)
+#     if len(failedPipes) > 0:
+#         startPipes(failedPipes)
             
 def mainloop(pipes):
     while True:
-        sleep(3)
-        checkStates(pipes)
+        sleep(0.01)
+        # checkStates(pipes)
 
 
 
