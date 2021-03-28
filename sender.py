@@ -80,8 +80,6 @@ def mainloop(pipes):
         # checkStates(pipes)
 
 
-
-
 main_loop = GLib.MainLoop()
 thread = Thread(target=main_loop.run, daemon=True)
 
