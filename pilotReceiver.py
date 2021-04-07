@@ -1,8 +1,11 @@
 import cv2
 
-
-cam = cv2.VideoCapture('udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink')
-
+# 'udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink'
+try:
+    cam = cv2.VideoCapture('udpsrc port=5100 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink')
+except Exception:
+    exit(0)
+    
 while True:
     videoComing, frame = cam.read()
     while not videoComing:
