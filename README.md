@@ -12,6 +12,7 @@ To use the sender script make sure you installed python3 and gstreamer for your 
 
  - make sure your cameras are connected to the PI
  - make sure you are runnning the appropriate reciever script on the recieving devices
+ - Some of the code here requires a custom compiled Opencv that has gstreamer enabled for the backend use
 
 ### TODO:
 
