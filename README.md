@@ -29,3 +29,5 @@ To use the sender script make sure you installed python3 and gstreamer for your 
  ### Notes:
 
  note to self : if we use a half decent router as the switch for this home network it probably won't work as the switch will instantly block the streams coming in from the broadcast IP
+
+ the pipelines were recieved well when used with the local host IP instead of the broadcast ip
