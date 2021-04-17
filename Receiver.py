@@ -1,19 +1,24 @@
 import cv2
 
-cam = cv2.VideoCapture('udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+cam0 = cv2.VideoCapture('udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+cam1 = cv2.VideoCapture('udpsrc port=5100 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
 
 while True:
 
     try:
-        ret, frame = cam.read()
+        ret0, frame0 = cam0.read()
+        ret1, frame1 = cam1.read()
     except Exception:
         break
-    if ret:
-        cv2.imshow("Frame", frame)
+    if ret0:
+        cv2.imshow("Frame0", frame0)
+    if ret1:
+        cv2.imshow("Frame1", frame1)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 
-cam.release()
+cam0.release()
+cam1.release()
 cv2.destroyAllWindows()
