@@ -1,16 +1,23 @@
 import cv2
 
-# 'udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink'
-try:
-    cam = cv2.VideoCapture('udpsrc port=5100 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
-except Exception:
-    exit(0)
-    
+numberOfCams = 2
+
+cams = [ cv2.VideoCapture('udpsrc port=5{}00 ! application/x-rtp, encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! appsink'.format(i), cv2.CAP_GSTREAMER) for i in range(numberOfCams)]
+
+print("We got past here")
+
+frames = []
+
 while True:
-    videoComing, frame = cam.read()
-    while not videoComing:
-        print("NO FEED COMING IN")
-        videoComing, frame = cam.read()
+
+    for cam in cams:
+        if not cam == None:
+            _, frame = cam.read()
+            frames.append(frame)
+
+    for i, frame in enumerate(frames):
+        if not frame == None:
+            cv2.imshow("Frame {}".format(i+3), frame)
 
     cv2.imshow("Vidoe0", frame)
 
@@ -18,5 +25,8 @@ while True:
         break
 
 
-cam.release()
+for cam in cams:
+    if not cam == None:
+        cam.release()
+
 cv2.destroyAllWindows()
