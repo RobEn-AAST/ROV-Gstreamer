@@ -21,10 +21,10 @@ def getCamsAndPipes():
     for i, cam in enumerate(cams):
         pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5{}00'.format(cam, i)
 
-        # print(pipStr)
-
         pipeline = Gst.parse_launch(pipStr)
         pipelines.append(pipeline)
+
+        print("PIPELINE : " + pipStr)
 
     for pipeline in pipelines:
         if not pipeline:
@@ -53,7 +53,6 @@ def startPipes(pipelines = getCamsAndPipes()):
 def mainloop(pipes):
     while True:
         sleep(0.01)
-        # checkStates(pipes)
 
 
 main_loop = GLib.MainLoop()
