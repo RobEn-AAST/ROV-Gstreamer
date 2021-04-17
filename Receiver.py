@@ -4,8 +4,10 @@ cam = cv2.VideoCapture('udpsrc port=5000 ! application/x-rtp, encoding-name=JPEG
 
 while True:
 
-    ret, frame = cam.read()
-
+    try:
+        ret, frame = cam.read()
+    except Exception:
+        break
     if ret:
         cv2.imshow("Frame", frame)
 
