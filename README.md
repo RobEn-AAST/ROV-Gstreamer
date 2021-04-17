@@ -19,10 +19,10 @@ To use the sender script make sure you installed python3 and gstreamer for your 
  - [X] write the damned thing
  - [X] test it
  - [X] exception handling for camera errors
- - [ ] run script on Pi startup 
  - [X] support for multi-device broadcasting
- - [ ] better optimized pipline for H.264 encoding
- - [ ] write a reciever script using opencv not gstreamer
+ - [X] write a reciever script using opencv not gstreamer
+    - [ ] **adapt reciever script for dynamic number of cameras**
+ - [ ] run script on Pi startup 
  - [ ] remove uneeded print statements and debug info
 
 
