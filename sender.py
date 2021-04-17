@@ -19,7 +19,7 @@ def getCamsAndPipes():
     pipelines = []
 
     for i, cam in enumerate(cams):
-        pipStr = 'v4l2src device="/dev/{}" !  video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay !  udpsink host=192.168.2.255 port=5{}00'.format(cam, i)
+        pipStr = 'v4l2src device="/dev/{}" !  image/jpeg,width=320,framerate=15/1,rate=15 ! rtpjpegpay !  udpsink host=192.168.2.255 port=5{}00'.format(cam, i)
 
         pipeline = Gst.parse_launch(pipStr)
         pipelines.append(pipeline)
