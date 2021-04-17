@@ -15,6 +15,9 @@ while True:
     if ret1:
         cv2.imshow("Frame1", frame1)
 
+    cv2.resizeWindow('Frame0', 640,600)
+    cv2.resizeWindow('Frame1', 640,600)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
