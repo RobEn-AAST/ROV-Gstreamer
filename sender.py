@@ -58,13 +58,14 @@ def mainloop():
 main_loop = GLib.MainLoop()
 thread = Thread(target=main_loop.run, daemon=True)
 
+thread.start()
+pipes = startPipes()
+
+if len(pipes) < 2:
+    print("Not enough cams present, exiting")
+    exit(1)
 
 try:
-    thread.start()
-    pipes = startPipes()
-    if len(pipes) < 2:
-        print("Not enough cams present, exiting")
-        exit(1)
     mainloop()
     
 except KeyboardInterrupt:
