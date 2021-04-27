@@ -50,7 +50,7 @@ def startPipes(pipelines = getCamsAndPipes()):
 
     return pipelines
             
-def mainloop(pipes):
+def mainloop():
     while True:
         sleep(0.01)
 
@@ -62,7 +62,9 @@ thread = Thread(target=main_loop.run, daemon=True)
 try:
     thread.start()
     pipes = startPipes()
-    mainloop(pipes)
+    if len(pipes) < 2:
+        exit(1)
+    mainloop()
     
 except KeyboardInterrupt:
     print("\nexiting...")
