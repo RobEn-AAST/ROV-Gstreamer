@@ -63,6 +63,7 @@ try:
     thread.start()
     pipes = startPipes()
     if len(pipes) < 2:
+        print("Not enough cams present, exiting")
         exit(1)
     mainloop()
     
