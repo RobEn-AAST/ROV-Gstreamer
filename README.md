@@ -16,18 +16,6 @@ To use the sender script make sure you installed python3 and gstreamer for your 
  - make sure you are runnning the appropriate reciever script on the recieving devices
  - Some of the code here requires a custom compiled Opencv that has gstreamer enabled for the backend use
 
-### TODO:
-
- - [X] write the damned thing
- - [X] test it
- - [X] exception handling for camera errors
- - [X] support for multi-device broadcasting
- - [X] write a reciever script using opencv not gstreamer
-    - [ ] **adapt reciever script for dynamic number of cameras**
- - [ ] run script on Pi startup 
- - [ ] remove uneeded print statements and debug info
-
-
  ### Notes:
 
  note to self : if we use a half decent router as the switch for this home network it probably won't work as the switch will instantly block the streams coming in from the broadcast IP
