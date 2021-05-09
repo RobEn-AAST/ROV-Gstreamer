@@ -1,4 +1,5 @@
-# ⛔️ DEPRECATED
+# ⛔️ DEPRECATED :
+## please consider using https://github.com/RobEn-AAST/ROV-camsys instead
 <h1 align="center">ROV Raspberry Pi Camera script</h1> 
 
 ### What is it
