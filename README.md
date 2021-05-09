@@ -1,3 +1,4 @@
+# ⛔️ DEPRECATED
 <h1 align="center">ROV Raspberry Pi Camera script</h1> 
 
 ### What is it
